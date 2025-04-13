@@ -1,0 +1,88 @@
+#include "header.h"
+
+
+/*
+             0     1    2    3    4
+-------- ./pipex file1 cmd1 cmd2 file2 ---------
+
+CHECK
+    - 5 arguments
+    - acess to files, files exist
+
+INPUT
+    - split argv[2] and argv[3]
+    - check if 1. word of argv[2] and argv[3] exist as program
+
+
+*/
+
+
+int main(int argc, char **argv, char **envp)
+{
+    int pipefd[2];
+    pid_t pid1, pid2;
+    int infile, outfile;
+
+    if (argc != 5) 
+        exit(EXIT_FAILURE);
+
+    infile = open(argv[1], O_RDONLY);
+    if (infile < 0) {
+        perror("Error Infile");
+        exit(EXIT_FAILURE);
+    }
+
+    outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    if (outfile < 0) {
+        perror("Error Outfile");
+        close(infile);
+        exit(EXIT_FAILURE);
+    }
+
+    //open pipe
+    if (pipe(pipefd) == -1) {
+        perror("Error pipe");
+        close(infile);
+        close(outfile);
+        exit(EXIT_FAILURE);
+    }
+
+    // Fork first child for cmd1
+    pid1 = fork();
+    if (pid1 < 0) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+
+    if (pid1 == 0) // First child process: executes cmd1
+    {  
+        // Redirect standard input to infile
+        if (dup2(infile, STDIN_FILENO) < 0) {
+            perror("dup2 infile");
+            exit(EXIT_FAILURE);
+        }
+        // Write to the pipe and not to stdout
+        if (dup2(pipefd[WRITE_END], STDOUT_FILENO) < 0) {
+            perror("dup2 pipe write");
+            exit(EXIT_FAILURE);
+        }
+
+        close(infile);
+        close(outfile);
+        close(pipefd[READ_END]);
+        close(pipefd[WRITE_END]);
+
+        
+
+
+    }
+
+
+
+    int execve(const char *pathname, char *const argv[], char *const envp[]);
+
+
+}
+
+
+
