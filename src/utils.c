@@ -1,5 +1,14 @@
 #include "header.h"
 
+void check_argc(int argc)
+{
+    if(argc != 5)
+    {
+        stderr_printf("%s", "Error: usage: infile cmd1 cmd2 outfile");
+        exit(EXIT_FAILURE);
+    }
+}
+
 int create_fork()
 {
     int pid1;
@@ -56,6 +65,33 @@ int	open_outfile(char *outfilename, int flags, mode_t mode, int infile)
 }
 
 char *get_path(char *argv)
+{
+    const char *prefix = "/bin/";
+    int prefix_len = strlen(prefix);
+    int cmd_len = strlen(argv);
+    
+    // +1 for null terminator
+    char *path = malloc(prefix_len + cmd_len + 1);
+    if (!path)
+        return NULL;
+
+    // Copy "/bin/" into path
+    strcpy(path, prefix);
+
+    // Append the command name
+    strcat(path, argv);
+    printf("manual %s\n", path);
+    //printf("getpath() %s\n", get_path("wc"));
+  
+    if(access(path, X_OK) != 0)
+    {
+        printf("Error: %s: cmd could not be found", argv); /// !!!!!!!!!!! printf
+        exit(EXIT_FAILURE);
+    }
+    return path;
+}
+
+char *get_path2(char *argv)
 {
     const char *prefix = "/bin/";
     int prefix_len = strlen(prefix);

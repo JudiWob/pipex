@@ -6,16 +6,19 @@ int main(int argc, char **argv, char **envp)
     int fd[2];
     pid_t pid1, pid2;
     int infile, outfile;
-    char *path;
-    char **cmd;
 
+    check_argc(argc);
     infile = open_infile(argv[1],  O_RDONLY);
-    outfile = open_outfile("outfile.txt",  O_CREAT | O_WRONLY | O_TRUNC, 0644, infile);
+    outfile = open_outfile(argv[4],  O_CREAT | O_WRONLY | O_TRUNC, 0644, infile);
     open_pipe(fd, infile, outfile);
     pid1 = create_fork();
 
     if(pid1 == 0)
-        run_child1(infile, outfile, fd, argv[2], envp);
+       child_1(infile, outfile, fd, argv[2], envp);
+
+    pid2 = create_fork();
+    if(pid2 == 0)
+       child_2(infile, outfile, fd, argv[3], envp);
 
     printf("sucess\n");
 }
