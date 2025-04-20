@@ -1,6 +1,7 @@
 #ifndef HEADER_H
 # define HEADER_H
 
+#include "../libft/libft.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -9,23 +10,31 @@
 #include <stdlib.h>
 
 
+
 #define EXIT_FAILURE 1
 #define EXIT_SUCESS 0
 
 #define READ_END 0
 #define WRITE_END 1
 
-//set up
+//utils 0
 void    check_argc(int argc);
-int     open_infile(char *filename, int flags);
-int     open_outfile(char *filename, int flags, mode_t mode, int infile);
-void    open_pipe(int *fd, int infile, int outfile);
 int     create_fork();
-void    child_1(int infile, int outfile, int *fd, char *argv, char **envp);
-void    child_2(int infile, int outfile, int *fd, char *argv, char **envp);
+void    open_pipe(int *fd, int infile, int outfile);
+int     open_infile(char *infilename, int flags);
+int     open_outfile(char *outfilename, int flags, mode_t mode, int infile);
 
+//utils1
+char    *get_path(char *argv, char *prefix, int try);
 void    stderr_printf(char *s, char *strerror);
-char    *get_path(char *argv);
-char    *get_path2(char *argv);
-char    **ft_split(char const *s, char c);
+void    stderr_putstr(char *s);
+void    stderr_putchar(int c);
+void    close_fds(int infile, int outfile, int *fd);
+
+//children
+void    child(int ch, int infile, int outfile, int *fd, char *argv, char **envp);
+void    child_1(int infile, int *fd);
+void    child_2(int outfile, int *fd);
+
+
 #endif
