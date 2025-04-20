@@ -1,0 +1,9 @@
+total 88
+-rw-r--r--@  1 detlef  staff    727 Apr 20 16:36 Makefile
+-rw-r--r--@  1 detlef  staff     23 Apr 20 16:06 infile.txt
+drwxr-xr-x   7 detlef  staff    224 Apr 20 16:38 lernen
+drwxr-xr-x  48 detlef  staff   1536 Apr 20 16:26 libft
+drwxr-xr-x@  4 detlef  staff    128 Apr 20 17:23 obj
+-rw-r--r--@  1 detlef  staff      0 Apr 20 17:23 outfile.txt
+-rwxr-xr-x@  1 detlef  staff  36808 Apr 20 17:23 pipex
+drwxr-xr-x@  7 detlef  staff    224 Apr 20 17:17 src
