@@ -12,19 +12,24 @@ It demonstrates the use of file descriptors, process creation, and piping output
 ## ✅ Objective
 
 Reproduce the following shell command in C:
-
+```bash
 $ cmd1 < infile | cmd2 > outfile
-
+```
 ## ✅ Usage
-
+```bash
 $ ./pipex infile "cmd1" "cmd2" outfile
+```
 • file1 and file2 are file names.
 • cmd1 and cmd2 are shell commands with their parameters.
 
 Example:
+```bash
 $ ./pipex file1.txt "grep hello" "wc -l" file2.txt
+```
 equivalent to
+```bash
 $ < file1.txt grep hello | wc -l > file2.txt
+```
 
 ## ✅ Allowed functions
 open, close, read, write,
