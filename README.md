@@ -1,5 +1,9 @@
 # pipex
 
+## 👩‍💻 Progress
+
+22.04 Almost ready for validation, testing phase
+
 ## 💡 Overview
 
 This project is a simplified version of the Unix pipe mechanism, recreated as part of the 42 school curriculum.
