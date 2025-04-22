@@ -13,7 +13,7 @@ It demonstrates the use of file descriptors, process creation, and piping output
 
 Reproduce the following shell command in C:
 
-$ <infile cmd1 | cmd2 >outfile
+$ cmd1 < infile | cmd2 > outfile
 
 ## ✅ Usage
 
