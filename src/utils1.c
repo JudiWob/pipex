@@ -6,7 +6,7 @@
 /*   By: jpaselt <jpaselt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:37 by jpaselt           #+#    #+#             */
-/*   Updated: 2025/04/25 16:28:38 by jpaselt          ###   ########.fr       */
+/*   Updated: 2025/04/27 15:36:34 by jpaselt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char *get_path(char *argv, char *prefix, int try)
         } 
         else
         {
-            stderr_printf("Error: cmd ""%s"": ", argv);
+            stderr_printf("Error: command not found: %s: ", argv);
             stderr_printf("%s", strerror(errno));
             exit(EXIT_FAILURE);            
         }   

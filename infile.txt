@@ -1,7 +1,5 @@
-hey 
-wie 
-eghets sfsdf
-dcv
-du
-sdfdf sfdsf
-sdfsdf
+If they are already committed once, 
+blablba won’t make 
+them disappear automatically.
+You’ll need to untrack 
+them like this, hello.

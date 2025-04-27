@@ -6,7 +6,7 @@
 /*   By: jpaselt <jpaselt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:15 by jpaselt           #+#    #+#             */
-/*   Updated: 2025/04/25 16:28:19 by jpaselt          ###   ########.fr       */
+/*   Updated: 2025/04/27 15:42:01 by jpaselt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void child(int ch, int infile, int outfile, int *fd, char *argv, char **envp)
         // If execve fails, print error
         stderr_printf("Error execve for %s:", argv);
         stderr_printf("%s", strerror(errno));
+		ft_free(cmd, path);
         exit(EXIT_FAILURE);
     }
 }
@@ -55,7 +56,7 @@ void child_1(int infile, int *fd)
 
 void child_2(int outfile, int *fd)
 {
-        //Read from fd0 and not from stdin
+    //Read from fd0 and not from stdin
     if(dup2(fd[0], STDIN_FILENO) < 0)
     {
         stderr_printf("Dup2 Error2: %s\n", strerror(errno));
@@ -67,3 +68,5 @@ void child_2(int outfile, int *fd)
         exit(EXIT_FAILURE);
     }
 }
+
+void 

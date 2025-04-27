@@ -6,11 +6,13 @@
 /*   By: jpaselt <jpaselt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:48:14 by jpaselt           #+#    #+#             */
-/*   Updated: 2025/04/27 15:23:10 by jpaselt          ###   ########.fr       */
+/*   Updated: 2025/04/27 15:22:09 by jpaselt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+#include <stdio.h>
 
 char			**ft_split(char const *s, char c);
 static int		count_len(const char *s, char c);
@@ -40,7 +42,11 @@ static int	count_len(const char *s, char c)
 
 	i = 0;
 	while (s[i] != c && s[i] != '\0')
+	{
+		if(i != 0 && s[i] == '\'' && s[i+1] == ' ' && s[i+2] == '\'')
+			return (i);
 		i++;
+	}
 	return (i);
 }
 
@@ -91,4 +97,11 @@ char	**ft_split(char const *s, char c)
 	}
 	charr[j] = NULL;
 	return (charr);
+}
+
+int main()
+{
+	char *test = "cut -d' ' -f1";
+
+	ft_split(test);
 }

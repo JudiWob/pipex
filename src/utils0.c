@@ -6,7 +6,7 @@
 /*   By: jpaselt <jpaselt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:31 by jpaselt           #+#    #+#             */
-/*   Updated: 2025/04/25 16:28:33 by jpaselt          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:35:03 by jpaselt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int create_fork()
 
     pid = fork();
     if(pid < 0){
-        stderr_printf("Error: forking: %s\n", strerror(errno));
+        stderr_printf("Error: fail forking: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
         //close files?
     }
@@ -43,7 +43,7 @@ int create_fork()
 void open_pipe(int *fd, int infile, int outfile)
 {
     if(pipe(fd) == -1){
-    stderr_printf("Error opening pipe: %s\n", strerror(errno));
+    stderr_printf("Error: fail opening pipe: %s\n", strerror(errno));
     close(infile);
     close(outfile);
     exit(EXIT_FAILURE);
@@ -57,8 +57,8 @@ int	open_infile(char *infilename, int flags)
 	infile = open(infilename, flags);
 	if (infile < 0)
 	{
-		stderr_printf("Error opening %s: ", infilename);
-        stderr_printf("%s\n",strerror(errno));
+		stderr_printf("Error: %s:",strerror(errno));
+		stderr_printf(" %s \n", infilename);
         close(infile);
 		exit(EXIT_FAILURE);
 	}
@@ -73,8 +73,8 @@ int	open_outfile(char *outfilename, int flags, mode_t mode, int infile)
 	outfile = open(outfilename, flags, mode);
 	if (outfile < 0)
 	{
-		stderr_printf("Error opening %s: ", outfilename);
-        stderr_printf("%s\n",strerror(errno));
+		stderr_printf("Error: %s:",strerror(errno));
+		stderr_printf(" %s\n: ", outfilename);
         close(infile);
         close(outfile);
         exit(EXIT_FAILURE);
