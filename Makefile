@@ -1,39 +1,48 @@
-## Directories
+# Directories
 OBJDIR    := obj
 SRC_DIR   := src
 LIBFT_DIR := libft
 
+# Library
+LIBFT     := $(LIBFT_DIR)/libft.a
+
 # Compiler
 CC        := cc
-#CFLAGS    := -Wall -Wextra -Werror
+CFLAGS    := -Wall -Wextra -Werror
 
 # Executable
 NAME      := pipex
 
 # Source and Object Files
-SRC_SRCS   := $(wildcard $(SRC_DIR)/*.c)
-LIBFT_SRCS := $(wildcard $(LIBFT_DIR)/*.c)
-ALL_SRCS   := $(SRC_SRCS) $(LIBFT_SRCS)
+SRC_SRCS := $(SRC_DIR)/children.c \
+            $(SRC_DIR)/pipex.c \
+            $(SRC_DIR)/utils0.c \
+            $(SRC_DIR)/utils1.c
 
-# Object file paths under obj/, preserving directory structure
-OBJS := $(patsubst %.c,$(OBJDIR)/%.o,$(ALL_SRCS))
+OBJS := $(SRC_SRCS:src/%.c=$(OBJDIR)/%.o)
 
 # Rules
-all: $(NAME)
+all: $(LIBFT) $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -I$(LIBFT_DIR) -o $(NAME)
 
-# Compile source files into obj/ subdirectories
-$(OBJDIR)/%.o: %.c
-	@mkdir -p $(dir $@)
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
+
+$(OBJDIR)/%.o: src/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR):
+	@mkdir -p $(OBJDIR)
 
 clean:
 	@rm -rf $(OBJDIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
