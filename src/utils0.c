@@ -6,48 +6,51 @@
 /*   By: jpaselt <jpaselt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:31 by jpaselt           #+#    #+#             */
-/*   Updated: 2025/04/27 14:35:03 by jpaselt          ###   ########.fr       */
+/*   Updated: 2025/04/30 17:07:35 by jpaselt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void    check_argc(int argc);
-int     create_fork();
-void    open_pipe(int *fd, int infile, int outfile);
-int     open_infile(char *infilename, int flags);
-int     open_outfile(char *outfilename, int flags, mode_t mode, int infile);
+void	check_argc(int argc);
+int		create_fork(int infile, int outfile);
+void	open_pipe(int *fd, int infile, int outfile);
+int		open_infile(char *infilename, int flags);
+int		open_outfile(char *outfilename, int flags, mode_t mode, int infile);
 
-void check_argc(int argc)
+void	check_argc(int argc)
 {
-    if(argc != 5)
-    {
-        stderr_printf("%s", "Error: usage: infile cmd1 cmd2 outfile");
-        exit(EXIT_FAILURE);
-    }
+	if (argc != 5)
+	{
+		stderr_printf("%s", "Error: usage: infile cmd1 cmd2 outfile");
+		exit(EXIT_FAILURE);
+	}
 }
 
-int create_fork()
+int	create_fork(int infile, int outfile)
 {
-    int pid;
+	int	pid;
 
-    pid = fork();
-    if(pid < 0){
-        stderr_printf("Error: fail forking: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
-        //close files?
-    }
-    return(pid);
+	pid = fork();
+	if (pid < 0)
+	{
+		stderr_printf("Error: fail forking: %s\n", strerror(errno));
+		close(infile);
+		close(outfile);
+		exit(EXIT_FAILURE);
+	}
+	return (pid);
 }
 
-void open_pipe(int *fd, int infile, int outfile)
+void	open_pipe(int *fd, int infile, int outfile)
 {
-    if(pipe(fd) == -1){
-    stderr_printf("Error: fail opening pipe: %s\n", strerror(errno));
-    close(infile);
-    close(outfile);
-    exit(EXIT_FAILURE);
-    }
+	if (pipe(fd) == -1)
+	{
+		stderr_printf("Error: fail opening pipe: %s\n", strerror(errno));
+		close(infile);
+		close(outfile);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	open_infile(char *infilename, int flags)
@@ -57,14 +60,13 @@ int	open_infile(char *infilename, int flags)
 	infile = open(infilename, flags);
 	if (infile < 0)
 	{
-		stderr_printf("Error: %s:",strerror(errno));
+		stderr_printf("Error: %s:", strerror(errno));
 		stderr_printf(" %s \n", infilename);
-        close(infile);
+		close(infile);
 		exit(EXIT_FAILURE);
 	}
 	return (infile);
 }
-
 
 int	open_outfile(char *outfilename, int flags, mode_t mode, int infile)
 {
@@ -73,11 +75,11 @@ int	open_outfile(char *outfilename, int flags, mode_t mode, int infile)
 	outfile = open(outfilename, flags, mode);
 	if (outfile < 0)
 	{
-		stderr_printf("Error: %s:",strerror(errno));
+		stderr_printf("Error: %s:", strerror(errno));
 		stderr_printf(" %s\n: ", outfilename);
-        close(infile);
-        close(outfile);
-        exit(EXIT_FAILURE);
+		close(infile);
+		close(outfile);
+		exit(EXIT_FAILURE);
 	}
 	return (outfile);
 }
