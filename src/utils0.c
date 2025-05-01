@@ -6,17 +6,17 @@
 /*   By: jpaselt <jpaselt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:28:31 by jpaselt           #+#    #+#             */
-/*   Updated: 2025/04/30 17:07:35 by jpaselt          ###   ########.fr       */
+/*   Updated: 2025/05/01 16:24:41 by jpaselt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
 void	check_argc(int argc);
-int		create_fork(int infile, int outfile);
-void	open_pipe(int *fd, int infile, int outfile);
-int		open_infile(char *infilename, int flags);
-int		open_outfile(char *outfilename, int flags, mode_t mode, int infile);
+int		create_fork(t_struct *fds);
+void	open_pipe(t_struct *fds);
+int		open_infile(char *infilename, int flags, t_struct *fds);
+int		open_outfile(char *outfilename, int flags, mode_t mode, t_struct *fds);
 
 void	check_argc(int argc)
 {
@@ -27,7 +27,7 @@ void	check_argc(int argc)
 	}
 }
 
-int	create_fork(int infile, int outfile)
+int	create_fork(t_struct *fds)
 {
 	int	pid;
 
@@ -35,51 +35,51 @@ int	create_fork(int infile, int outfile)
 	if (pid < 0)
 	{
 		stderr_printf("Error: fail forking: %s\n", strerror(errno));
-		close(infile);
-		close(outfile);
+		close(fds->infile);
+		close(fds->outfile);
+		free(fds);
 		exit(EXIT_FAILURE);
 	}
 	return (pid);
 }
 
-void	open_pipe(int *fd, int infile, int outfile)
+void	open_pipe(t_struct *fds)
 {
-	if (pipe(fd) == -1)
+	if (pipe(fds->fd) == -1)
 	{
 		stderr_printf("Error: fail opening pipe: %s\n", strerror(errno));
-		close(infile);
-		close(outfile);
+		close(fds->infile);
+		close(fds->outfile);
+		free(fds);
 		exit(EXIT_FAILURE);
 	}
 }
 
-int	open_infile(char *infilename, int flags)
+int	open_infile(char *infilename, int flags, t_struct *fds)
 {
-	int	infile;
-
-	infile = open(infilename, flags);
-	if (infile < 0)
+	fds->infile = open(infilename, flags);
+	if (fds->infile < 0)
 	{
 		stderr_printf("Error: %s:", strerror(errno));
 		stderr_printf(" %s \n", infilename);
-		close(infile);
+		close(fds->infile);
+		free(fds);
 		exit(EXIT_FAILURE);
 	}
-	return (infile);
+	return (fds->infile);
 }
 
-int	open_outfile(char *outfilename, int flags, mode_t mode, int infile)
+int	open_outfile(char *outfilename, int flags, mode_t mode, t_struct *fds)
 {
-	int	outfile;
-
-	outfile = open(outfilename, flags, mode);
-	if (outfile < 0)
+	fds->outfile = open(outfilename, flags, mode);
+	if (fds->outfile < 0)
 	{
 		stderr_printf("Error: %s:", strerror(errno));
 		stderr_printf(" %s\n: ", outfilename);
-		close(infile);
-		close(outfile);
+		close(fds->infile);
+		close(fds->infile);
+		free(fds);
 		exit(EXIT_FAILURE);
 	}
-	return (outfile);
+	return (fds->outfile);
 }
